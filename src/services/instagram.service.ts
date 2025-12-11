@@ -155,3 +155,14 @@ export const replyToComment = async (commentId: string, message: string, accessT
   
   return response.data;
 };
+
+export const getRecentMedia = async (instagramId: string, accessToken: string, limit: number = 5) => {
+  const response = await axios.get(`${FACEBOOK_API_URL}/${instagramId}/media`, {
+    params: {
+      access_token: accessToken,
+      limit: limit,
+      fields: 'id,caption,media_type,media_url,timestamp,permalink'
+    }
+  });
+  return response.data.data;
+};

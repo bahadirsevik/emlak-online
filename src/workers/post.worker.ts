@@ -10,9 +10,11 @@ export const postWorker = new Worker(
     const { postId, userId } = job.data;
     console.log(`Processing job ${job.id} for post ${postId}`);
 
+    let post: any = null;
+
     try {
       // 1. Fetch Post
-      const post = await prisma.post.findUnique({
+      post = await prisma.post.findUnique({
         where: { id: postId },
         include: { instagramAccount: true },
       });
@@ -179,6 +181,40 @@ export const postWorker = new Worker(
       let errorMessage = error.message;
       if (error.response && error.response.data && error.response.data.error) {
         errorMessage = JSON.stringify(error.response.data.error);
+      }
+
+      // Verify if post actually went live despite error
+      if (post && post.instagramAccount) {
+        try {
+          // Wait 10 seconds for Instagram to index
+          await new Promise(resolve => setTimeout(resolve, 10000));
+          
+          const recentMedia = await instagramService.getRecentMedia(
+            post.instagramAccount.instagramUserId, 
+            decrypt(post.instagramAccount.accessToken),
+            5
+          );
+
+          const match = recentMedia.find((m: any) => 
+            m.caption === (post.caption || '') && 
+            (Date.now() - new Date(m.timestamp).getTime() < 10 * 60 * 1000) // Within 10 mins
+          );
+
+        if (match) {
+          console.log(`Verifying: Post found on Instagram with ID ${match.id} despite error.`);
+          await prisma.post.update({
+            where: { id: postId },
+            data: {
+              status: 'PUBLISHED',
+              instagramPostId: match.id,
+              publishedAt: new Date(match.timestamp),
+              error: `Recovered from error: ${errorMessage}`
+            },
+          });
+          return; // Skip marking as failed
+        }
+      } catch (verifyError) {
+        console.error('Verification failed:', verifyError);
       }
 
       await prisma.post.update({
