@@ -28,7 +28,7 @@ export default function HashtagManager({ isOpen, onClose, onSelect }: HashtagMan
   const fetchGroups = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/hashtags/groups', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/hashtags/groups', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       if (response.ok) {
@@ -51,7 +51,7 @@ export default function HashtagManager({ isOpen, onClose, onSelect }: HashtagMan
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/hashtags/groups', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/hashtags/groups', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ export default function HashtagManager({ isOpen, onClose, onSelect }: HashtagMan
     if (!confirm('Are you sure you want to delete this group?')) return;
     try {
       const token = localStorage.getItem('token');
-      await fetch(`http://localhost:3000/api/hashtags/groups/${id}`, {
+      await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/hashtags/groups/${id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });

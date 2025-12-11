@@ -56,7 +56,7 @@ export default function WatermarkSettingsModal({ isOpen, onClose, account, onUpd
       const formData = new FormData();
       formData.append('image', file);
 
-      const response = await fetch('http://localhost:3000/api/upload', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/upload', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData,
@@ -84,7 +84,7 @@ export default function WatermarkSettingsModal({ isOpen, onClose, account, onUpd
     setSaving(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:3000/api/instagram/accounts/${account.id}/watermark`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/instagram/accounts/${account.id}/watermark`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

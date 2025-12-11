@@ -32,7 +32,7 @@ export default function Calendar() {
       const start = startOfMonth(currentDate).toISOString();
       const end = endOfMonth(currentDate).toISOString();
 
-      const response = await fetch(`http://localhost:3000/api/calendar/events?start=${start}&end=${end}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/calendar/events?start=${start}&end=${end}`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

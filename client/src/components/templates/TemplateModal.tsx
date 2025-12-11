@@ -43,8 +43,8 @@ export default function TemplateModal({ isOpen, onClose, onSave, initialData, in
     try {
       const token = localStorage.getItem('token');
       const url = initialData?.id 
-        ? `http://localhost:3000/api/templates/${initialData.id}`
-        : 'http://localhost:3000/api/templates';
+        ? `${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/templates/${initialData.id}`
+        : '${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/templates';
       
       const method = initialData?.id ? 'PUT' : 'POST';
 

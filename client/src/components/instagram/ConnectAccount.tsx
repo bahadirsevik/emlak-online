@@ -15,7 +15,7 @@ export default function ConnectAccount() {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/instagram/manual_connect', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/instagram/manual_connect', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

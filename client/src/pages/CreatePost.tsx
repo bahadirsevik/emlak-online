@@ -51,7 +51,7 @@ export default function CreatePost() {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/ai/analyze-image', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ai/analyze-image', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function CreatePost() {
       const file = new File([editedImageBlob], "edited-image.png", { type: "image/png" });
       formData.append('image', file);
 
-      const response = await fetch('http://localhost:3000/api/upload', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/upload', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -108,7 +108,7 @@ export default function CreatePost() {
     setImporting(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/scraper/scrape', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/scraper/scrape', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -166,7 +166,7 @@ export default function CreatePost() {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3000/api/posts/schedule', {
+      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/posts/schedule', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
