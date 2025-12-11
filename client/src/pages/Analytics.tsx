@@ -45,8 +45,8 @@ export default function Analytics() {
       const headers = { 'Authorization': `Bearer ${token}` };
 
       const [overviewRes, accountsRes] = await Promise.all([
-        fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/analytics/overview', { headers }),
-        fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/analytics/accounts', { headers })
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/analytics/overview`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/analytics/accounts`, { headers })
       ]);
 
       if (overviewRes.ok) setOverview(await overviewRes.json());

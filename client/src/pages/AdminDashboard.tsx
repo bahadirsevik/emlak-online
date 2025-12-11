@@ -39,8 +39,8 @@ export default function AdminDashboard() {
       const headers = { 'Authorization': `Bearer ${token}` };
 
       const [usersRes, statsRes] = await Promise.all([
-        fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/users', { headers }),
-        fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/stats', { headers })
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/users`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/admin/stats`, { headers })
       ]);
 
       if (usersRes.status === 403) {

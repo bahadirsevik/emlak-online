@@ -45,7 +45,7 @@ export default function PropertyDetailsForm({ onCaptionGenerated, imageAnalysis 
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ai/generate-caption', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ai/generate-caption`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -66,7 +66,7 @@ export default function PropertyDetailsForm({ onCaptionGenerated, imageAnalysis 
       
       // Generate hashtags based on property type and location
       const hashtagTopic = `Real Estate ${details.type} ${details.location} ${details.title}`;
-      const hashtagResponse = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ai/generate-hashtags', {
+      const hashtagResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/ai/generate-hashtags`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

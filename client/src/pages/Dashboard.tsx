@@ -42,8 +42,8 @@ export default function Dashboard() {
       const headers = { 'Authorization': `Bearer ${token}` };
 
       const [statsRes, recentRes] = await Promise.all([
-        fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/posts/stats', { headers }),
-        fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/posts/recent', { headers })
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/posts/stats`, { headers }),
+        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/posts/recent`, { headers })
       ]);
 
       if (statsRes.ok) setStats(await statsRes.json());

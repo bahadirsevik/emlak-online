@@ -27,7 +27,7 @@ export default function ImageUploader({ onUploadComplete }: ImageUploaderProps) 
         const formData = new FormData();
         formData.append('image', file);
 
-        const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/upload', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/upload`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`,

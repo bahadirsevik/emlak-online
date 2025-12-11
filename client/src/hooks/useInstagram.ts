@@ -22,7 +22,7 @@ export const useInstagram = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/instagram/accounts', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/instagram/accounts`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -42,7 +42,7 @@ export const useInstagram = () => {
   const connectAccount = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/instagram/auth', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/instagram/auth`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }

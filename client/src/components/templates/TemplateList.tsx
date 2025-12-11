@@ -28,7 +28,7 @@ export default function TemplateList({ onSelect, onEdit, refreshTrigger }: Templ
     setLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/templates', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:3000'}/api/templates`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
