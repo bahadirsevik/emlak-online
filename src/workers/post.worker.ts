@@ -216,6 +216,7 @@ export const postWorker = new Worker(
       } catch (verifyError) {
         console.error('Verification failed:', verifyError);
       }
+      }
 
       await prisma.post.update({
         where: { id: postId },
