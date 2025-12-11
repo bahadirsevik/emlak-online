@@ -17,6 +17,8 @@ import hashtagRoutes from './routes/hashtag.routes';
 import scraperRoutes from './routes/scraper.routes';
 import webhookRoutes from './routes/webhook.routes';
 import leadsRoutes from './routes/leads.routes';
+import './workers/post.worker';
+
 
 // Load environment variables
 dotenv.config();
