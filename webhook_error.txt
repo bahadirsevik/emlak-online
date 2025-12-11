@@ -1,0 +1,4 @@
+2025-11-23T16:36:41.782Z - Cannot read properties of undefined (reading 'id')
+TypeError: Cannot read properties of undefined (reading 'id')
+    at processComment (C:\Users\kanar\OneDrive\Masaüstü\gravity\src\controllers\webhook.controller.ts:103:52)
+    at async handleWebhook (C:\Users\kanar\OneDrive\Masaüstü\gravity\src\controllers\webhook.controller.ts:48:15)

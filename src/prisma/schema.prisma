@@ -1,0 +1,190 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String             @id @default(cuid())
+  email             String             @unique
+  password          String
+  firstName         String?
+  lastName          String?
+  role              Role               @default(USER)
+  status            Status             @default(ACTIVE)
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  hashtagGroups     HashtagGroup[]
+  instagramAccounts InstagramAccount[]
+  posts             Post[]
+  templates         Template[]
+  settings          UserSettings?
+}
+
+model InstagramAccount {
+  id                 String              @id @default(cuid())
+  userId             String
+  instagramUserId    String
+  username           String
+  accessToken        String
+  tokenExpiresAt     DateTime
+  accountType        String
+  isActive           Boolean             @default(true)
+  connectedAt        DateTime            @default(now())
+  lastSyncAt         DateTime?
+  optimizationLog    Json?
+  error              String?
+  retryCount         Int                 @default(0)
+  watermarkPublicId  String?
+  watermarkPosition  String?             @default("south_east")
+  watermarkOpacity   Int?                @default(80)
+  watermarkScale     Int?                @default(20)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  automationSettings AutomationSettings?
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  leads              Lead[]
+  posts              Post[]
+
+  @@unique([userId, instagramUserId])
+  @@index([userId])
+}
+
+model Lead {
+  id                 String           @id @default(cuid())
+  instagramAccountId String
+  username           String
+  fullName           String?
+  comment            String
+  mediaUrl           String?
+  status             LeadStatus       @default(NEW)
+  interactionDate    DateTime         @default(now())
+  notes              String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  instagramAccount   InstagramAccount @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)
+
+  @@index([instagramAccountId])
+  @@index([status])
+}
+
+model AutomationSettings {
+  id                   String           @id @default(cuid())
+  instagramAccountId   String           @unique
+  isActive             Boolean          @default(false)
+  keywords             String[]
+  dmTemplate           String           @default("Merhaba! İlgilendiğiniz ilan hakkında detaylı bilgi için: [LINK]")
+  replyToComment       Boolean          @default(true)
+  commentReplyTemplate String           @default("Merhaba, detaylı bilgiyi DM üzerinden ilettim. 📩")
+  createdAt            DateTime         @default(now())
+  updatedAt            DateTime         @updatedAt
+  instagramAccount     InstagramAccount @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)
+}
+
+model Post {
+  id                 String            @id @default(cuid())
+  userId             String
+  instagramAccountId String?
+  images             String[]
+  imagePublicIds     String[]
+  caption            String
+  hashtags           String[]
+  applyWatermark     Boolean           @default(false)
+  mediaType          MediaType         @default(IMAGE)
+  thumbnailUrl       String?
+  status             PostStatus        @default(DRAFT)
+  scheduledTime      DateTime?
+  publishedAt        DateTime?
+  instagramPostId    String?
+  instagramUrl       String?
+  aiGenerated        Boolean           @default(false)
+  captionVariants    Json?
+  optimizationLog    Json?
+  error              String?
+  retryCount         Int               @default(0)
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  instagramAccount   InstagramAccount? @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)
+  user               User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([status])
+}
+
+model Template {
+  id        String   @id @default(cuid())
+  name      String
+  content   String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model HashtagGroup {
+  id        String   @id @default(cuid())
+  name      String
+  hashtags  String[]
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model UserSettings {
+  id                 String   @id @default(cuid())
+  userId             String   @unique
+  defaultCaptionTone String   @default("casual")
+  defaultLanguage    String   @default("tr")
+  autoHashtags       Boolean  @default(true)
+  maxHashtags        Int      @default(30)
+  emailOnPublish     Boolean  @default(true)
+  emailOnError       Boolean  @default(true)
+  monthlyPostLimit   Int      @default(100)
+  accountLimit       Int      @default(5)
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  ADMIN
+  USER
+  PREMIUM
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  CAROUSEL
+  REELS
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  CONVERTED
+  ARCHIVED
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PROCESSING
+  PUBLISHED
+  FAILED
+  CANCELLED
+}
