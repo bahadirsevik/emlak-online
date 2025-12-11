@@ -44,7 +44,9 @@
     "puppeteer": "^24.31.0",
     "puppeteer-extra": "^3.3.6",
     "puppeteer-extra-plugin-stealth": "^2.11.2",
-    "zod": "^3.22.4"
+    "zod": "^3.22.4",
+    "tsc-alias": "^1.8.8",
+    "typescript": "^5.3.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -64,8 +66,7 @@
     "prisma": "^5.22.0",
     "supertest": "^7.1.4",
     "ts-jest": "^29.4.5",
-    "tsc-alias": "^1.8.8",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "ts-jest": "^29.4.5",
+    "tsx": "^4.7.1"
   }
 }
