@@ -105,6 +105,14 @@ model Post {
   optimizationLog    Json?
   error              String?
   retryCount         Int               @default(0)
+  
+  // ✅ Twitter Entegrasyonu
+  shareToTwitter     Boolean           @default(false)
+  twitterPostId      String?
+  twitterStatus      String?           // 'PENDING', 'POSTED', 'FAILED'
+  twitterError       String?
+  twitterUrl         String?
+  
   createdAt          DateTime          @default(now())
   updatedAt          DateTime          @updatedAt
   instagramAccount   InstagramAccount? @relation(fields: [instagramAccountId], references: [id], onDelete: Cascade)

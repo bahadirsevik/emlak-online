@@ -164,7 +164,7 @@ export const postWorker = new Worker(
         );
       }
 
-      // 4. Update Post Status
+      // 4. Update Post Status (Instagram)
       await prisma.post.update({
         where: { id: postId },
         data: {
@@ -174,7 +174,80 @@ export const postWorker = new Worker(
         },
       });
 
-      console.log(`Post ${postId} published successfully! Media ID: ${mediaId}`);
+      console.log(`Post ${postId} published to Instagram! Media ID: ${mediaId}`);
+
+      // ✅ 5. Twitter'a Paylaşım (shareToTwitter aktifse)
+      if (postAny.shareToTwitter) {
+        console.log(`Sharing post ${postId} to Twitter...`);
+        
+        try {
+          const twitterBotUrl = process.env.TWITTER_BOT_URL || 'http://localhost:3000';
+          const twitterApiKey = process.env.TWITTER_BOT_API_KEY;
+          
+          if (!twitterApiKey) {
+            throw new Error('TWITTER_BOT_API_KEY not configured in .env');
+          }
+          
+          // Caption'u Twitter için kısalt (280 karakter limiti)
+          let twitterCaption = post.caption || '';
+          const hashtagString = post.hashtags?.join(' ') || '';
+          const hashtagLength = hashtagString ? hashtagString.length + 2 : 0; // +2 for \n\n
+          const maxCaptionLength = 280 - hashtagLength - 10; // 10 char buffer
+          
+          if (twitterCaption.length > maxCaptionLength) {
+            twitterCaption = twitterCaption.substring(0, maxCaptionLength - 3) + '...';
+          }
+          
+          // Medya URL ve publicId hazırla
+          const mediaUrl = post.images?.[0] || null;
+          const mediaPublicId = post.imagePublicIds?.[0] || null;
+          
+          // Twitter Bot API'ye istek gönder
+          const response = await fetch(`${twitterBotUrl}/api/external/post`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${twitterApiKey}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              mediaUrl,
+              mediaPublicId,
+              caption: twitterCaption,
+              hashtags: post.hashtags || [],
+              mediaType: postAny.mediaType
+            })
+          });
+          
+          const twitterResult = await response.json();
+          
+          if (twitterResult.success) {
+            console.log(`✅ Post ${postId} shared to Twitter! URL: ${twitterResult.result?.url}`);
+            
+            await prisma.post.update({
+              where: { id: postId },
+              data: {
+                twitterStatus: 'POSTED',
+                twitterPostId: twitterResult.result?.url?.split('/').pop() || null,
+                twitterUrl: twitterResult.result?.url || null
+              }
+            });
+          } else {
+            throw new Error(twitterResult.error || 'Twitter posting failed');
+          }
+          
+        } catch (twitterError: any) {
+          console.error(`❌ Twitter posting failed for post ${postId}:`, twitterError.message);
+          
+          // Twitter hatası durumunda sadece twitterStatus güncelle, Instagram başarılı kalsın
+          await prisma.post.update({
+            where: { id: postId },
+            data: {
+              twitterStatus: 'FAILED',
+              twitterError: twitterError.message
+            }
+          });
+        }
+      }
     } catch (error: any) {
       console.error(`Failed to publish post ${postId}:`, error);
       

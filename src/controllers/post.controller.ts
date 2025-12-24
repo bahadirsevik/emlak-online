@@ -7,7 +7,7 @@ interface AuthRequest extends Request {
 }
 
 export const schedulePost = async (req: AuthRequest, res: Response) => {
-  const { images, imagePublicIds, caption, scheduledTime, instagramAccountId, applyWatermark } = req.body;
+  const { images, imagePublicIds, caption, scheduledTime, instagramAccountId, applyWatermark, shareToTwitter } = req.body;
   const userId = req.user?.id;
 
   if (!userId) {
@@ -32,6 +32,8 @@ export const schedulePost = async (req: AuthRequest, res: Response) => {
         applyWatermark: applyWatermark || false,
         mediaType: req.body.mediaType || 'IMAGE',
         thumbnailUrl: req.body.thumbnailUrl,
+        shareToTwitter: shareToTwitter || false,
+        twitterStatus: shareToTwitter ? 'PENDING' : null,
       } as any,
     });
 
