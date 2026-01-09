@@ -105,40 +105,36 @@ export const generateRealEstateCaption = async (details: any, language: string, 
 
 export const generateHashtags = async (topic: string, language: string) => {
   try {
-    const prompt = `Sen bir Instagram emlak pazarlama uzmanısın. Aşağıdaki emlak ilanı için KEŞFET sayfasına düşecek ve görüntülenme alacak hashtagler üret.
+    const prompt = `Sen bir Instagram emlak pazarlama uzmanısın. Aşağıdaki emlak ilanı için EN ETKİLİ 5 hashtag üret.
 
 KONU: "${topic}"
 DİL: ${language}
 
-HASHTAG STRATEJİSİ (Instagram algoritması için optimize):
+HASHTAG STRATEJİSİ (5 adet - her biri farklı kategoriden):
 
-1. YÜKSEK HACİMLİ (2 adet) - Geniş kitleye ulaşım:
-   - Genel emlak/gayrimenkul terimleri
-   - Örnek: #emlak #gayrimenkul #satılık
+1. YÜKSEK HACİMLİ (1 adet) - Geniş erişim:
+   - Örnek: #emlak veya #satılık
 
-2. ORTA REKABETLİ (3 adet) - Keşfet sayfası için ideal:
-   - Şehir/bölge + emlak kombinasyonları
-   - Örnek: #istanbulemlak #anaborsa
+2. BÖLGE ODAKLI (1 adet) - Lokasyon hedefleme:
+   - Şehir + emlak kombinasyonu
+   - Örnek: #istanbulemlak #ankarasatılık
 
-3. NİŞ/SPESİFİK (2 adet) - Hedef kitleye ulaşım:
-   - Mahalle veya özel özellik bazlı
-   - Örnek: #denizmanzaralıdaire #bahçeliev
+3. EMLAK TİPİ (1 adet) - Spesifik mülk:
+   - Örnek: #satılıkdaire #kiralıkofis #tarlasatılık
 
-4. TREND/LIFESTYLE (3 adet) - Engagement artırıcı:
-   - Yatırım, yaşam tarzı, fırsat odaklı
-   - Örnek: #yatırımfırsatı #hayalevim #emlaktrend
+4. TREND/FARKLI (1 adet) - Dikkat çekici:
+   - Yatırım veya yaşam tarzı odaklı
+   - Örnek: #yatırımfırsatı #hayalevim #emlak2024
 
-5. AKSİYON ODAKLI (2 adet) - İletişim çağrısı:
-   - Örnek: #haborsa #acilsatılık #fırsatkaçırmayın
+5. AKSİYON (1 adet) - Etkileşim çağrısı:
+   - Örnek: #hemenara #kaçırmayın #fırsat
 
 KURALLAR:
-- Toplam TAM 12 hashtag üret
-- Türkçe karakterler kullan (ş, ı, ğ, ü, ö, ç)
+- TAM 5 hashtag üret (fazla veya eksik olmasın)
+- Türkçe karakterler kullan
 - Sadece hashtagleri boşlukla ayırarak ver
-- Başka açıklama yazma
-- Her hashtag # ile başlasın
-- Çok uzun hashtaglerden kaçın (max 25 karakter)
-- Gerçekten kullanılan, popüler tagleri tercih et`;
+- Açıklama yazma, sadece hashtagler
+- Kısa ve akılda kalıcı olsun`;
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
