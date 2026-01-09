@@ -105,15 +105,40 @@ export const generateRealEstateCaption = async (details: any, language: string, 
 
 export const generateHashtags = async (topic: string, language: string) => {
   try {
-    const prompt = `Generate exactly 8 high-quality, professional, and strictly relevant Instagram hashtags for a real estate post about "${topic}".
-    Language: ${language}.
-    
-    Guidelines:
-    1. Use only the most relevant and popular tags.
-    2. Avoid generic or spammy tags (like #love, #instagood).
-    3. Focus on location, property type, and real estate terms.
-    
-    Return ONLY the hashtags separated by spaces. No other text.`;
+    const prompt = `Sen bir Instagram emlak pazarlama uzmanısın. Aşağıdaki emlak ilanı için KEŞFET sayfasına düşecek ve görüntülenme alacak hashtagler üret.
+
+KONU: "${topic}"
+DİL: ${language}
+
+HASHTAG STRATEJİSİ (Instagram algoritması için optimize):
+
+1. YÜKSEK HACİMLİ (2 adet) - Geniş kitleye ulaşım:
+   - Genel emlak/gayrimenkul terimleri
+   - Örnek: #emlak #gayrimenkul #satılık
+
+2. ORTA REKABETLİ (3 adet) - Keşfet sayfası için ideal:
+   - Şehir/bölge + emlak kombinasyonları
+   - Örnek: #istanbulemlak #anaborsa
+
+3. NİŞ/SPESİFİK (2 adet) - Hedef kitleye ulaşım:
+   - Mahalle veya özel özellik bazlı
+   - Örnek: #denizmanzaralıdaire #bahçeliev
+
+4. TREND/LIFESTYLE (3 adet) - Engagement artırıcı:
+   - Yatırım, yaşam tarzı, fırsat odaklı
+   - Örnek: #yatırımfırsatı #hayalevim #emlaktrend
+
+5. AKSİYON ODAKLI (2 adet) - İletişim çağrısı:
+   - Örnek: #haborsa #acilsatılık #fırsatkaçırmayın
+
+KURALLAR:
+- Toplam TAM 12 hashtag üret
+- Türkçe karakterler kullan (ş, ı, ğ, ü, ö, ç)
+- Sadece hashtagleri boşlukla ayırarak ver
+- Başka açıklama yazma
+- Her hashtag # ile başlasın
+- Çok uzun hashtaglerden kaçın (max 25 karakter)
+- Gerçekten kullanılan, popüler tagleri tercih et`;
 
     const completion = await openai.chat.completions.create({
       messages: [{ role: "user", content: prompt }],
